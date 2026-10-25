@@ -211,6 +211,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.os }}-ccache-x86_64-
 
+      - name: Install OBS 33 🎬
+        run: |
+          curl -fsSL -o /tmp/obs.deb \
+            https://github.com/obsproject/obs-studio/releases/download/33.0.0/OBS-Studio-33.0.0-Ubuntu-26.04-x86_64.deb
+          sudo apt-get update && sudo apt-get install -y /tmp/obs.deb
+          dpkg -s obs-studio | grep Version
+          dpkg -L obs-studio | grep -m1 'cmake/libobs' || echo "WARN: no libobs cmake config"
+
       - name: Build Plugin 🧱
         uses: ./.github/actions/build-plugin
         with:
